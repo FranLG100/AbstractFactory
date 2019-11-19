@@ -23,10 +23,19 @@ public class SqlDbDepartamentoImpl implements DepartamentoDAO {
     }
 
     public boolean InsertarDep(Departamento dep) {
+        int total=0;
         boolean valor = false;
+        String contador="SELECT COUNT(*) FROM departamentos WHERE dept_no="+dep.getDeptno();
         String sql = "INSERT INTO departamentos VALUES(?, ?, ?)";
-        PreparedStatement sentencia;
+        PreparedStatement sentencia = null;
+        PreparedStatement cuentaFilas;
         try {
+            cuentaFilas=conexion.prepareStatement(contador);
+            ResultSet rs = cuentaFilas.executeQuery();
+            if (rs.next()) {
+                total=rs.getInt(1);
+            }
+            if(total==0){
             sentencia = conexion.prepareStatement(sql);
             sentencia.setInt(1, dep.getDeptno());
             sentencia.setString(2, dep.getDnombre());
@@ -38,6 +47,10 @@ public class SqlDbDepartamentoImpl implements DepartamentoDAO {
                  System.out.printf("Departamento %d insertado%n", dep.getDeptno());
             }
             sentencia.close();
+            }else{
+                System.out.printf("Ya existe ese Departamento");
+            }
+            
 
         } catch (SQLException e) {
             MensajeExcepcion(e);      
@@ -47,10 +60,19 @@ public class SqlDbDepartamentoImpl implements DepartamentoDAO {
 
     @Override
     public boolean EliminarDep(int deptno) {
+        int total=0;
+        String contador="SELECT COUNT(*) FROM empleados WHERE dept_no="+deptno;
         boolean valor = false;
         String sql = "DELETE FROM departamentos WHERE dept_no = ? ";
         PreparedStatement sentencia;
+        PreparedStatement cuentaFilas;
         try {
+            cuentaFilas=conexion.prepareStatement(contador);
+            ResultSet rs = cuentaFilas.executeQuery();
+            if (rs.next()) {
+                total=rs.getInt(1);
+            }
+            if(total==0){
             sentencia = conexion.prepareStatement(sql);
             sentencia.setInt(1, deptno);
             int filas = sentencia.executeUpdate();
@@ -60,6 +82,9 @@ public class SqlDbDepartamentoImpl implements DepartamentoDAO {
                 System.out.printf("Departamento %d eliminado%n", deptno);
             }
             sentencia.close();
+            }else{
+                System.out.println("Ese departamento tiene empleados");
+            }
         } catch (SQLException e) {
             MensajeExcepcion(e);      
         }
