@@ -25,10 +25,17 @@ public class NeodatisDepartamentoImpl implements DepartamentoDAO {
 
     @Override
     public boolean InsertarDep(Departamento dep) {
-        bd.store(dep);
-        bd.commit();
-        System.out.printf("Departamento: %d Insertado %n", dep.getDeptno());
-        return true;
+        Departamento dpto=ConsultarDep(dep.getDeptno());
+        if(dpto.getDnombre().equalsIgnoreCase("no existe")){
+            bd.store(dep);
+            bd.commit();
+            System.out.printf("Departamento: %d Insertado %n", dep.getDeptno());
+            return true;
+        }
+        else{
+            System.out.println("Ya existe ese departamento");
+            return false;
+        }
     }
 
     @Override

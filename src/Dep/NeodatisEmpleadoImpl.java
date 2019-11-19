@@ -26,16 +26,23 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
 
     @Override
     public boolean InsertarEmpleado(Empleado emp) {
-        bd.store(emp);
-        bd.commit();
-        System.out.printf("Empleado: %d Insertado %n", emp.getEmp_no());
-        return true;
+        Empleado empAux=ConsultarEmpleado(emp.getEmp_no());
+        if(empAux.getEdept()<0){
+            System.out.println(empAux.getEdept());
+            bd.store(emp);
+            bd.commit();
+            System.out.printf("Empleado: %d Insertado %n", emp.getEmp_no());
+            return true;
+        }else{
+            System.out.println("Ya existe ese empleado");
+            return false;
+        }
     }
 
     @Override
     public boolean EliminarEmpleado(int emp_no) {
         boolean valor = false;
-        IQuery query = new CriteriaQuery(Departamento.class, Where.equal("emp_no", emp_no));
+        IQuery query = new CriteriaQuery(Empleado.class, Where.equal("emp_no", emp_no));
         Objects<Empleado> objetos = bd.getObjects(query);
         try {
             Empleado empleado = (Empleado) objetos.getFirst();
@@ -52,7 +59,7 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
     @Override
     public boolean ModificarEmpleado(int emp_no, Empleado emp) {
         boolean valor = false;
-        IQuery query = new CriteriaQuery(Departamento.class, Where.equal("emp_no", emp_no));
+        IQuery query = new CriteriaQuery(Empleado.class, Where.equal("emp_no", emp_no));
         Objects<Empleado> objetos = bd.getObjects(query);
         try {
             Empleado empleado = (Empleado) objetos.getFirst();
@@ -75,7 +82,7 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
 
     @Override
     public Empleado ConsultarEmpleado(int emp_no) {
-        IQuery query = new CriteriaQuery(Departamento.class, Where.equal("emp_no", emp_no));
+        IQuery query = new CriteriaQuery(Empleado.class, Where.equal("emp_no", emp_no));
         Objects<Empleado> objetos = bd.getObjects(query);
         Empleado emp = new Empleado();
         if (objetos != null) {
@@ -84,9 +91,9 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
             } catch (IndexOutOfBoundsException i) {
                 System.out.printf("Departamento: %d No existe%n", emp_no);
                 emp.setEapellido("No existe");
-                emp.setEdept(emp_no);
+                emp.setEdept(-1);
                 emp.setDir(-1);
-                emp.setEmp_no(-1);
+                emp.setEmp_no(emp_no);
                 emp.setFecha_alt(LocalDate.of(1900,1,1));
                 emp.setOficio("Ninguno");
                 emp.setSalario(0);

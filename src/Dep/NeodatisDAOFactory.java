@@ -30,5 +30,10 @@ public class NeodatisDAOFactory extends DAOFactory {
     public DepartamentoDAO getDepartamentoDAO() {
         return new NeodatisDepartamentoImpl();
     }
+    
+    @Override
+    public EmpleadoDAO getEmpleadoDAO(){
+        return new NeodatisEmpleadoImpl();
+    }
 
 }

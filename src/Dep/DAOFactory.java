@@ -7,6 +7,8 @@ public abstract class DAOFactory {
  
   public abstract DepartamentoDAO getDepartamentoDAO();
   
+  public abstract EmpleadoDAO getEmpleadoDAO();
+  
   public static DAOFactory getDAOFactory(int bd) {  
     switch (bd) {
       case MYSQL:          
@@ -17,4 +19,6 @@ public abstract class DAOFactory {
           return null;
     }
   }
+  
+  
 }

@@ -6,6 +6,7 @@
 package Dep;
 
 import java.time.Clock;
+import java.time.LocalDate;
 
 /**
  *
@@ -13,17 +14,17 @@ import java.time.Clock;
  */
 public class Main {
     public static void main(String[] args){
-        NeodatisDAOFactory.crearConexion();
-        SqlDbDAOFactory.crearConexion();
-        //DAOFactory factory=new NeodatisDAOFactory();
-        DAOFactory factory=new SqlDbDAOFactory();
+        DAOFactory factory=new NeodatisDAOFactory();
+        //DAOFactory factory=new SqlDbDAOFactory();
         DepartamentoDAO dpto=factory.getDepartamentoDAO();
-        Departamento dptoAux=new Departamento(1,"Finanzas","Sevilla");
+        EmpleadoDAO emp=factory.getEmpleadoDAO();
+        Departamento dptoAux=new Departamento(1,"Contabilidad","Sevilla");
+        Empleado empAux=new Empleado(4, "Rodriguez", 2, 1, LocalDate.of(2019, 1, 19), "Oficinista", 900.0);
         
-        
-        
+        emp.InsertarEmpleado(empAux);
         //dpto.InsertarDep(dptoAux);
         
-        System.out.println(dpto.ConsultarDep(1).getDnombre());
+        System.out.println(dpto.ConsultarDep(2).getDnombre());
+        System.out.println(emp.ConsultarEmpleado(4).getEapellido());
     }
 }

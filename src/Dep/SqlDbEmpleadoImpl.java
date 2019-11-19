@@ -31,13 +31,13 @@ public class SqlDbEmpleadoImpl implements EmpleadoDAO {
         PreparedStatement sentencia;
         try {
             sentencia = conexion.prepareStatement(sql);
-            sentencia.setString(1, emp.getEapellido());
-            sentencia.setInt(2, emp.getEdept());
-            sentencia.setInt(3,emp.getDir());
-            sentencia.setInt(4,emp.getEmp_no());
+            sentencia.setInt(1,emp.getEmp_no());
+            sentencia.setString(2, emp.getEapellido());
+            sentencia.setString(3,emp.getOficio());
+            sentencia.setInt(4,emp.getDir());
             sentencia.setDate(5, java.sql.Date.valueOf(emp.getFecha_alt()));
-            sentencia.setString(6,emp.getOficio());
-            sentencia.setDouble(7, emp.getSalario());
+            sentencia.setDouble(6, emp.getSalario());
+            sentencia.setInt(7, emp.getEdept());
             int filas = sentencia.executeUpdate();
             //System.out.printf("Filas insertadas: %d%n", filas);
             if (filas > 0) {
@@ -113,7 +113,7 @@ public class SqlDbEmpleadoImpl implements EmpleadoDAO {
                 emp.setEmp_no(rs.getInt("emp_no"));
                 emp.setEapellido(rs.getString("apellido"));
                 emp.setEdept(rs.getInt("dept_no"));
-                emp.setFecha_alt(LocalDate.from(Instant.ofEpochMilli(rs.getDate("fecha_alt").getTime())));
+                emp.setFecha_alt(LocalDate.from(rs.getDate("fecha_alt").toLocalDate()));
                 emp.setSalario(rs.getDouble("salario"));
                 emp.setDir(rs.getInt("dir"));
                 emp.setOficio(rs.getString("oficio"));

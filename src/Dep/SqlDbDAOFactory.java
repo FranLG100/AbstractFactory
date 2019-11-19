@@ -50,4 +50,9 @@ public class SqlDbDAOFactory extends DAOFactory {
     public DepartamentoDAO getDepartamentoDAO() {
         return new SqlDbDepartamentoImpl();
     }
+
+    @Override
+    public EmpleadoDAO getEmpleadoDAO() {
+        return new SqlDbEmpleadoImpl();
+    }
 }
