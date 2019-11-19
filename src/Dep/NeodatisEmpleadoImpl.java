@@ -27,6 +27,23 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
     @Override
     public boolean InsertarEmpleado(Empleado emp) {
         Empleado empAux=ConsultarEmpleado(emp.getEmp_no());
+        
+        IQuery queryDepartamentos = new CriteriaQuery(Departamento.class, Where.equal("deptno", emp.getEdept()));
+        Objects<Departamento> objetos = bd.getObjects(queryDepartamentos);
+        
+        IQuery queryJefes = new CriteriaQuery(Empleado.class, Where.equal("dir", emp.getDir()));
+        Objects<Departamento> jefes = bd.getObjects(queryJefes);
+        
+        if(objetos.isEmpty()){
+            System.out.println("No existe ese departamento");
+            return false;
+        }
+        
+        if(jefes.isEmpty() && emp.getDir()!=0){
+            System.out.println("No existe ese jefe");
+            return false;
+        }
+        
         if(empAux.getEdept()<0){
             System.out.println(empAux.getEdept());
             bd.store(emp);
@@ -43,14 +60,21 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
     public boolean EliminarEmpleado(int emp_no) {
         boolean valor = false;
         IQuery query = new CriteriaQuery(Empleado.class, Where.equal("emp_no", emp_no));
+        IQuery queryJefes = new CriteriaQuery(Empleado.class, Where.equal("dir", emp_no));
         Objects<Empleado> objetos = bd.getObjects(query);
-        try {
-            Empleado empleado = (Empleado) objetos.getFirst();
-            bd.delete(empleado);
-            bd.commit();
-            valor = true;
-        } catch (IndexOutOfBoundsException i) {
-            System.out.printf("Empleado a eliminar: %d No existe%n", emp_no);
+        Objects<Empleado> jefes=bd.getObjects(queryJefes);
+        if(jefes.isEmpty()){
+            try {
+                Empleado empleado = (Empleado) objetos.getFirst();
+                bd.delete(empleado);
+                System.out.printf("Empleado eliminado");
+                bd.commit();
+                valor = true;
+            } catch (IndexOutOfBoundsException i) {
+                System.out.printf("Empleado a eliminar: %d No existe%n", emp_no);
+            }
+        }else{
+            System.out.printf("Ese empleado tiene subordinados");
         }
 
         return valor;
@@ -59,6 +83,23 @@ public class NeodatisEmpleadoImpl implements EmpleadoDAO {
     @Override
     public boolean ModificarEmpleado(int emp_no, Empleado emp) {
         boolean valor = false;
+        
+        IQuery queryDepartamentos = new CriteriaQuery(Departamento.class, Where.equal("deptno", emp.getEdept()));
+        Objects<Departamento> dptos = bd.getObjects(queryDepartamentos);
+        
+        IQuery queryJefes = new CriteriaQuery(Empleado.class, Where.equal("dir", emp.getDir()));
+        Objects<Departamento> jefes = bd.getObjects(queryJefes);
+        
+        if(dptos.isEmpty()){
+            System.out.println("No existe ese departamento");
+            return false;
+        }
+        
+        if(jefes.isEmpty() && emp.getDir()!=0){
+            System.out.println("No existe ese jefe");
+            return false;
+        }
+        
         IQuery query = new CriteriaQuery(Empleado.class, Where.equal("emp_no", emp_no));
         Objects<Empleado> objetos = bd.getObjects(query);
         try {

@@ -17,6 +17,7 @@ public class Empleado implements Serializable{
         this.emp_no=emp_no;
         this.eapellido=eapellido;
         this.edept=edept;
+        this.dir=dir;
         this.fecha_alt=fecha_alt;
         this.oficio=oficio;
         this.salario=salario;

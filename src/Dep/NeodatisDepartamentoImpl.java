@@ -42,14 +42,21 @@ public class NeodatisDepartamentoImpl implements DepartamentoDAO {
     public boolean EliminarDep(int deptno) {
         boolean valor = false;
         IQuery query = new CriteriaQuery(Departamento.class, Where.equal("deptno", deptno));
+        IQuery queryEmpleados = new CriteriaQuery(Empleado.class, Where.equal("edept", deptno));
         Objects<Departamento> objetos = bd.getObjects(query);
-        try {
-            Departamento depart = (Departamento) objetos.getFirst();
-            bd.delete(depart);
-            bd.commit();
-            valor = true;
-        } catch (IndexOutOfBoundsException i) {
-            System.out.printf("Departamento a eliminar: %d No existe%n", deptno);
+        Objects<Empleado> empleados=bd.getObjects(queryEmpleados);
+        if(empleados.isEmpty()){
+            try {
+                Departamento depart = (Departamento) objetos.getFirst();
+                bd.delete(depart);
+                System.out.printf("Departamento eliminado");
+                bd.commit();
+                valor = true;
+            } catch (IndexOutOfBoundsException i) {
+                System.out.printf("Departamento a eliminar: %d No existe%n", deptno);
+            }
+        }else{
+            System.out.printf("Ese departamento tiene empleados");
         }
 
         return valor;
