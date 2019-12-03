@@ -16,13 +16,14 @@ public class SqlDbDAOFactory extends DAOFactory {
 
     static Connection conexion = null;
     static String DRIVER = "com.mysql.jdbc.Driver";
-    static String URLDB = "jdbc:mysql://falorente.salesianas.es/falorente_departamentos";
+    //static String URLDB = "jdbc:mysql://localhost:3306/falorente_departamentos";
+    static String URLDB = "jdbc:mysql://florente.salesianas.es/falorente_departamentos";
     static String USUARIO = "falor_fralg";
     static String CLAVE = "fralg100@gmail.com";
 
     public SqlDbDAOFactory() {
         DRIVER = "com.mysql.jdbc.Driver";
-        URLDB = "jdbc:mysql://falorente.salesianas.es/falorente_departamentos";
+        URLDB = "jdbc:mysql://florente.salesianas.es/falorente_departamentos";
     }
 
     // crear la conexion

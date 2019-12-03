@@ -49,12 +49,12 @@ public class SqlDbEmpleadoImpl implements EmpleadoDAO {
             if (rs.next()) {
                 exDpto=rs.getInt(1);
             }
-            existeJefePS=conexion.prepareStatement(existeJefe);
-            rs = existeJefePS.executeQuery();
-            if (rs.next()) {
-                exJefe=rs.getInt(1);
-            }
-            if(total==0 && exDpto>0 && exJefe>0){
+                existeJefePS=conexion.prepareStatement(existeJefe);
+                rs = existeJefePS.executeQuery();
+                if (rs.next()) {
+                    exJefe=rs.getInt(1);
+                }
+            if(total==0 && exDpto>0 && (exJefe>0 ||emp.getDir()==0) ){
             sentencia = conexion.prepareStatement(sql);
             sentencia.setInt(1,emp.getEmp_no());
             sentencia.setString(2, emp.getEapellido());
@@ -75,7 +75,7 @@ public class SqlDbEmpleadoImpl implements EmpleadoDAO {
                     System.out.println("Ya existe ese empleado");
                 if(exDpto==0)
                     System.out.println("No existe ese departamento");
-                if(exJefe==0)
+                if(exJefe==0 && emp.getDir()!=0)
                     System.out.println("No existe ese Director");
             }
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class SqlDbEmpleadoImpl implements EmpleadoDAO {
             if (rs.next()) {
                 exJefe=rs.getInt(1);
             }
-            if(exDpto>0 && exJefe>0){
+            if(exDpto>0 && (exJefe>0 || emp.getDir()==0)){
                 sentencia = conexion.prepareStatement(sql);
                 sentencia.setInt(7, num);
                 sentencia.setString(1, emp.getEapellido());
